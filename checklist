@@ -1,0 +1,82 @@
+Day-1: 
+Cybersecurity 
+  - cyber
+  - security
+      - protection of assets 
+      - Assets
+           - network 
+           - data 
+           - information 
+           - device
+             (cloud, blockchain, ......) 
+  - cyber security 
+
+
+- Need for security
+    - prevent 
+           unauthorized access
+           data breaches 
+           data theft 
+           service disruption 
+
+
+- protect 
+    service 
+       Examples:    CIA 
+
+    mechanism 
+       Examples
+          Encryption 
+          Hashing 
+
+- Basic terms
+    - vulnerability 
+    - Threat 
+    - Attack 
+    - Risk 
+    - Impact 
+
+  - Encryption 
+  - Decryption 
+  - cipher text 
+
+  - hashing 
+  - Message Digest 
+
+  - symmetric cipher 
+       - same key for both encryption and decryption 
+      shift cipher 
+      rot 13 
+
+      columnar cipher 
+      columnar with keyword
+
+  - asymmetric cipher 
+       - public key  ( For encryption) 
+       - private key ( For decryption) 
+  
+
+  - Principles of security 
+    Guidelines to protect assets 
+ 
+    - Defense in depth 
+                security measures in each layer 
+  
+    - Security by design 
+               plan protection before launch, and maintain it throughout the service’s life.
+    Reference: https://devguide.owasp.org/en/02-foundations/03-security-principles/
+
+    - Attacks 
+        Phishing 
+        Shoulder surfing 
+
+Books: 
+Information Security: Principles and Practice
+                                             Book by Mark Stamp
+Computer security principle and practices 
+                                             Book by William Statllings 
+
+
+
+
+  
