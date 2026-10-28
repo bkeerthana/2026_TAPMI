@@ -1,0 +1,66 @@
+INSTRUCTOR GUIDE AND ANSWERS
+
+BEFORE CLASS — XAMPP SMOKE CHECK
+[ ] Start Apache/MySQL; initialize without error.
+[ ] Faculty login succeeds; bad password fails; student1 login succeeds.
+[ ] Protected 30+50 saves total 80, Distinction; audit row appears.
+[ ] Vulnerable validation accepts 70+10; Protected rejects it.
+[ ] Correct/reset invalid stored marks after comparison.
+[ ] Protected student1 sees Asha only; cannot edit; logout hides records.
+[ ] Same-session visibility mode lets student1 see all three students.
+[ ] Reset replaces marks/users/audit entries with documented seed data.
+[ ] Check browser POST payload and PHP/MySQL settings before students arrive.
+The supplied package has not been executed against PHP/MySQL in its authoring runtime.
+
+A. Transmission: submitted student ID and marks in a POST request.
+Processing: session role check, numeric/range checks, addition, grade selection.
+Storage: users with password hashes, component marks, audit entries.
+Sessions are handled by PHP separately. Browser display is not the database.
+
+B. 70+10 => total 80, Distinction; wrong because internal exceeds 40.
+Vulnerable mode saves it. Protected rejects it. Changing mode does not undo
+stored invalid data; correct Asha to 30+50 or reset.
+Protected test results: 40+60 accepted (100, Distinction); 41+59 rejected;
+0+0 accepted (0, Below pass); 30+61 rejected. Zero is a valid mark.
+A malicious submission and an accidental entry can trigger the same weakness.
+The central combination: integrity / processing / technology.
+
+C. Visibility mode: all three records visible, but student has no edit form
+and server-side role enforcement prevents student updates in every mode.
+Protected student1: Asha only. Logged-out users: no records in every mode.
+Authentication checks identity; authorization decides permitted records/actions.
+The same browser session must be reused across faculty/student logins.
+Switch back to Protected as faculty after demonstration.
+
+D. Network payload contains marks and student ID (plus the form token).
+Browser sees plaintext before TLS encryption and after decryption, even
+under HTTPS. Developer Tools is not a demonstration of network eavesdropping.
+HTTP has no TLS protection. POST alone does not encrypt data. HTTPS is not
+configured by this package; do not tell students Protected mode enables it.
+
+E. marks stores component values, not grade/total. audit_log stores actor,
+mode, student ID, time and before/after marks. Audit records support tracing;
+a database administrator could change them. Production audit protection
+requires additional controls. Refresh confirms persistence; it is not a backup.
+Optional teacher backup: phpMyAdmin > select demo database > Export > Quick SQL.
+Do not drop/import during class without a deliberate recovery plan.
+
+F. Browser gets a service/connection error. After restart records remain
+because stopping Apache does not delete MySQL data. This is a simulated
+service outage, not an attack or DDoS. A backup does not keep a service online;
+it helps recovery after data loss. Monitoring, restart procedures and redundant
+infrastructure address different availability needs.
+
+G. Example: unauthorized marks disclosure.
+Objective: confidentiality. State: stored information being retrieved/displayed.
+People: train faculty to protect credentials and avoid sharing result screens.
+Policy: students may access only their own results; faculty access is authorized.
+Technology: server-side record filtering and role checks.
+Example for processing integrity: trained staff; policy limits 40/60;
+server-side validation. Controls can protect multiple states/objectives.
+
+SUGGESTED CLASS FLOW
+5 min setup/story; 10 min input/processing comparison; 8 min permissions;
+5 min transmission; 5 min database/audit; 3 min outage; 4 min model discussion.
+Explain that the deliberately vulnerable modes isolate one weakness each.
+Prepared statements and password hashing remain enabled in all modes.

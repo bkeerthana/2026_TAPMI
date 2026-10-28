@@ -1,0 +1,52 @@
+STUDENT ACTIVITY SHEET — McCumber Marks Laboratory
+Name: __________________  Roll number: ______________  Date: ___________
+Duration: approximately 40 minutes. Work with fictional records only.
+
+A. Trace information states (5 minutes)
+Log in as faculty. In Protected mode, save Asha: internal 30, exam 50.
+1. Which data travels from browser to server?
+2. What checks/calculations occur in PHP?
+3. What information remains in MySQL after logout?
+Record: transmission ______ processing ______ storage ______.
+
+B. Integrity during processing (10 minutes)
+As faculty, select Vulnerable: component validation. For Asha submit
+internal 70, exam 10. Record total, grade, whether saved, and why invalid.
+Now select Protected and submit 70,10 again. Record the response.
+Does mode switching itself correct the earlier stored marks? Explain.
+Correct Asha to 30,50. Then test 40,60; 41,59; 0,0; and 30,61.
+For each: predict acceptance/rejection, execute, and record the result.
+Question: can correct arithmetic still create an invalid academic record?
+
+C. Confidentiality and access (8 minutes)
+As faculty select Vulnerable: record visibility. Log out, then log in as
+student1 in the SAME browser. Whose records appear? Can the student edit?
+Log out. Log in as faculty, select Protected, log out, log in as student1.
+Whose record appears now? Log out and check whether marks remain visible.
+Explain authentication versus authorization using your observations.
+
+D. Transmission without Burp (5 minutes)
+As faculty open browser Developer Tools (F12) > Network. Save valid marks.
+Select the POST request for index.php and inspect Payload/Form Data.
+Identify internal, exam and id. Why can the endpoint browser see them?
+Does POST imply encryption? Is this URL HTTP or HTTPS?
+Do not record password or session-token screenshots.
+
+E. Storage and audit evidence (5 minutes)
+As faculty make two valid mark updates and inspect the audit trail.
+Open http://localhost/phpmyadmin/ > mccumber_marks_demo > marks > Browse.
+Compare marks with the application. Browse audit_log. Do not edit it.
+Explain why audit entries support accountability but do not prevent edits.
+
+F. Availability (teacher-led, 3 minutes)
+Teacher stops Apache in XAMPP. Refresh the application. Record the symptom.
+Teacher restarts Apache. Reload and check whether MySQL records remain.
+Is this a simulated outage or a DDoS attack? What would a recovery procedure say?
+Stopping Apache affects every local application it serves.
+
+G. Complete the McCumber mapping (4 minutes)
+Choose one problem above. Identify: security objective, information state,
+people safeguard, policy/procedure safeguard, and technology safeguard.
+Extension: explain one confidentiality, integrity and availability control
+for EACH information state (nine combinations). People/policy/technology
+can support each combination; the model has 3 x 3 x 3 = 27 cells.

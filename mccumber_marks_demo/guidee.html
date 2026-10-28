@@ -1,0 +1,185 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>McCumber lab guide</title><link rel="stylesheet" href="style.css"><style>pre{white-space:pre-wrap;font:16px/1.6 Arial}@media print{nav,button{display:none}section{break-before:page;border:0}body{background:white}}</style><body><main><h1>McCumber laboratory guide</h1><nav><a href="index.php">Open application</a><a href="#activities">Student activities</a><a href="#answers">Instructor answers</a></nav><button onclick="window.print()">Print / save as PDF</button><section id="setup"><h2>Setup and operation</h2><pre>McCumber Marks Laboratory — XAMPP
+==================================
+START HERE
+1. Extract mccumber_marks_demo into C:\xampp\htdocs\
+   Correct result: C:\xampp\htdocs\mccumber_marks_demo\index.php
+2. Start Apache and MySQL in the XAMPP Control Panel.
+3. Open http://localhost/mccumber_marks_demo/install.php
+4. Click “Initialize / keep existing data”.
+5. Open http://localhost/mccumber_marks_demo/
+6. Open guide.html for classroom activities and answers.
+
+DEMO ACCOUNTS
+Faculty: faculty / Teach@123
+Student Asha: student1 / Learn@123
+Student Ravi: student2 / Learn@123
+All names and records are fictional.
+
+CONFIGURATION
+config.php defaults: host 127.0.0.1, MySQL port 3306, database
+mccumber_marks_demo, user root, blank password (common XAMPP default).
+If your settings differ, edit config.php. Do not change your MySQL password
+to blank merely for this lab. Setup needs CREATE DATABASE and table-write rights.
+The app uses PHP 7.4+ with PDO MySQL; PHP 8.x is recommended.
+If Apache uses port 8080, use http://localhost:8080/mccumber_marks_demo/.
+
+DATABASE INITIALIZATION
+install.php creates users, marks and audit_log. Passwords are hashed using
+PHP password_hash. It inserts missing seed rows without overwriting existing
+marks. Reset clears only this dedicated demo&#x27;s three tables and reseeds them.
+Do not point config.php at a database containing unrelated data.
+Reset logs out the current browser; other sessions are not invalidated.
+
+MODES (faculty changes mode in the application)
+Protected: student sees own record; faculty edits; PHP validates 0–40 / 0–60.
+Vulnerable component validation: faculty edits; only 0–100 individual values
+and total &lt;=100 are enforced. 70 + 10 is wrongly accepted.
+Vulnerable record visibility: logged-in students see everyone&#x27;s marks;
+component validation remains enforced. Students still cannot edit marks.
+Modes persist across logout in the SAME browser session. Select a mode as
+faculty, log out, then log in as student1 in that same browser. A new private
+window has a different session and defaults to protected mode.
+Switching back to protected mode does NOT repair previously saved bad marks.
+Correct the record as faculty or reset the demo database.
+
+SCORING
+Total = internal + examination. Distinction &gt;=75; First class &gt;=60;
+Pass &gt;=50; otherwise Below pass. These are fictional teaching rules,
+not institutional assessment regulations. Total and grade are calculated
+on display; database stores component marks. Passing is based on total only.
+
+SAFETY AND LIMITATIONS
+Local classroom application; PHP denies non-loopback requests. Open using
+localhost or 127.0.0.1 on the XAMPP computer. Do not publish this demo.
+Protected mode refers to the demonstrated controls, not production readiness.
+No HTTPS automation, real student data, real banking, Burp, SQL injection,
+or denial-of-service traffic is needed. POST is not encryption.
+The local installer is deliberately accessible for classroom resets.
+Audit entries are a demonstration, not tamper-proof evidence.
+
+TROUBLESHOOTING
+404: confirm folder nesting and Apache port.
+Setup needed: start MySQL; run install.php; check config.php.
+Access denied: check database credentials/permissions, not student credentials.
+Could not find driver: enable PDO MySQL in the active PHP configuration;
+restart Apache. XAMPP normally includes it.
+Expired form: reload the page and submit again.
+Port conflict: resolve the XAMPP service conflict or configure the relevant port.
+Database issues in another app (such as DVWA) are independent of this package.
+
+VERIFICATION
+Source and archive checks performed during preparation. The authoring
+runtime had no PHP/MySQL; end-to-end execution in XAMPP was not performed.
+Use the smoke-check checklist in the instructor guide before class.
+</pre></section><section id="activities"><h2>Student activity sheet</h2><pre>STUDENT ACTIVITY SHEET — McCumber Marks Laboratory
+Name: __________________  Roll number: ______________  Date: ___________
+Duration: approximately 40 minutes. Work with fictional records only.
+
+A. Trace information states (5 minutes)
+Log in as faculty. In Protected mode, save Asha: internal 30, exam 50.
+1. Which data travels from browser to server?
+2. What checks/calculations occur in PHP?
+3. What information remains in MySQL after logout?
+Record: transmission ______ processing ______ storage ______.
+
+B. Integrity during processing (10 minutes)
+As faculty, select Vulnerable: component validation. For Asha submit
+internal 70, exam 10. Record total, grade, whether saved, and why invalid.
+Now select Protected and submit 70,10 again. Record the response.
+Does mode switching itself correct the earlier stored marks? Explain.
+Correct Asha to 30,50. Then test 40,60; 41,59; 0,0; and 30,61.
+For each: predict acceptance/rejection, execute, and record the result.
+Question: can correct arithmetic still create an invalid academic record?
+
+C. Confidentiality and access (8 minutes)
+As faculty select Vulnerable: record visibility. Log out, then log in as
+student1 in the SAME browser. Whose records appear? Can the student edit?
+Log out. Log in as faculty, select Protected, log out, log in as student1.
+Whose record appears now? Log out and check whether marks remain visible.
+Explain authentication versus authorization using your observations.
+
+D. Transmission without Burp (5 minutes)
+As faculty open browser Developer Tools (F12) &gt; Network. Save valid marks.
+Select the POST request for index.php and inspect Payload/Form Data.
+Identify internal, exam and id. Why can the endpoint browser see them?
+Does POST imply encryption? Is this URL HTTP or HTTPS?
+Do not record password or session-token screenshots.
+
+E. Storage and audit evidence (5 minutes)
+As faculty make two valid mark updates and inspect the audit trail.
+Open http://localhost/phpmyadmin/ &gt; mccumber_marks_demo &gt; marks &gt; Browse.
+Compare marks with the application. Browse audit_log. Do not edit it.
+Explain why audit entries support accountability but do not prevent edits.
+
+F. Availability (teacher-led, 3 minutes)
+Teacher stops Apache in XAMPP. Refresh the application. Record the symptom.
+Teacher restarts Apache. Reload and check whether MySQL records remain.
+Is this a simulated outage or a DDoS attack? What would a recovery procedure say?
+Stopping Apache affects every local application it serves.
+
+G. Complete the McCumber mapping (4 minutes)
+Choose one problem above. Identify: security objective, information state,
+people safeguard, policy/procedure safeguard, and technology safeguard.
+Extension: explain one confidentiality, integrity and availability control
+for EACH information state (nine combinations). People/policy/technology
+can support each combination; the model has 3 x 3 x 3 = 27 cells.
+</pre></section><section id="answers"><h2>Instructor answers</h2><pre>INSTRUCTOR GUIDE AND ANSWERS
+
+BEFORE CLASS — XAMPP SMOKE CHECK
+[ ] Start Apache/MySQL; initialize without error.
+[ ] Faculty login succeeds; bad password fails; student1 login succeeds.
+[ ] Protected 30+50 saves total 80, Distinction; audit row appears.
+[ ] Vulnerable validation accepts 70+10; Protected rejects it.
+[ ] Correct/reset invalid stored marks after comparison.
+[ ] Protected student1 sees Asha only; cannot edit; logout hides records.
+[ ] Same-session visibility mode lets student1 see all three students.
+[ ] Reset replaces marks/users/audit entries with documented seed data.
+[ ] Check browser POST payload and PHP/MySQL settings before students arrive.
+The supplied package has not been executed against PHP/MySQL in its authoring runtime.
+
+A. Transmission: submitted student ID and marks in a POST request.
+Processing: session role check, numeric/range checks, addition, grade selection.
+Storage: users with password hashes, component marks, audit entries.
+Sessions are handled by PHP separately. Browser display is not the database.
+
+B. 70+10 =&gt; total 80, Distinction; wrong because internal exceeds 40.
+Vulnerable mode saves it. Protected rejects it. Changing mode does not undo
+stored invalid data; correct Asha to 30+50 or reset.
+Protected test results: 40+60 accepted (100, Distinction); 41+59 rejected;
+0+0 accepted (0, Below pass); 30+61 rejected. Zero is a valid mark.
+A malicious submission and an accidental entry can trigger the same weakness.
+The central combination: integrity / processing / technology.
+
+C. Visibility mode: all three records visible, but student has no edit form
+and server-side role enforcement prevents student updates in every mode.
+Protected student1: Asha only. Logged-out users: no records in every mode.
+Authentication checks identity; authorization decides permitted records/actions.
+The same browser session must be reused across faculty/student logins.
+Switch back to Protected as faculty after demonstration.
+
+D. Network payload contains marks and student ID (plus the form token).
+Browser sees plaintext before TLS encryption and after decryption, even
+under HTTPS. Developer Tools is not a demonstration of network eavesdropping.
+HTTP has no TLS protection. POST alone does not encrypt data. HTTPS is not
+configured by this package; do not tell students Protected mode enables it.
+
+E. marks stores component values, not grade/total. audit_log stores actor,
+mode, student ID, time and before/after marks. Audit records support tracing;
+a database administrator could change them. Production audit protection
+requires additional controls. Refresh confirms persistence; it is not a backup.
+Optional teacher backup: phpMyAdmin &gt; select demo database &gt; Export &gt; Quick SQL.
+Do not drop/import during class without a deliberate recovery plan.
+
+F. Browser gets a service/connection error. After restart records remain
+because stopping Apache does not delete MySQL data. This is a simulated
+service outage, not an attack or DDoS. A backup does not keep a service online;
+it helps recovery after data loss. Monitoring, restart procedures and redundant
+infrastructure address different availability needs.
+
+G. Example: unauthorized marks disclosure.
+Objective: confidentiality. State: stored information being retrieved/displayed.
+People: train faculty to protect credentials and avoid sharing result screens.
+Policy: students may access only their own results; faculty access is authorized.
+Technology: server-side record filtering and role checks.
+Example for processing integrity: trained staff; policy limits 40/60;
+server-side validation. Controls can protect multiple states/objectives.
